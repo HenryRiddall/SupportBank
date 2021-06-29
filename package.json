@@ -1,0 +1,23 @@
+{
+  "name": "supportbank",
+  "version": "1.0.0",
+  "description": "CSV file stuffs",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HenryRiddall/SupportBank.git"
+  },
+  "author": "Henry",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HenryRiddall/SupportBank/issues"
+  },
+  "homepage": "https://github.com/HenryRiddall/SupportBank#readme",
+  "devDependencies": {
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.4"
+  }
+}
