@@ -66,10 +66,23 @@ function readCSV(){
 }
 
 function readJSON(){
-    JSON.parse()
+    fs.readFile('Transactions2013.json', 'utf8' , (err, data) => {
+        if (err) {
+            console.error(err)
+            return
+        }
+        //console.log(data)
+        data = data.split('"FromAccount"').join('"From"')
+        data = data.split('"ToAccount"').join('"To"')
+        console.log(data)
+        const transactionsJSON: any = JSON.parse(data)
+
+        listenForCommands(parseList(transactionsJSON))
+    })
 }
 
 function parseList(list: Record<string, string>[]): [Transaction[], Map<string, Account>] {
+    //console.log(list)
     logger.trace("Parsing CSV")
     let transactions: Transaction[] = []
     let accounts: Map<string, Account> = new Map()
@@ -97,7 +110,7 @@ function addTransaction(transaction: Record<string, string>, accounts: Map<strin
     const fromAccount: Account = <Account>accounts.get(fromName)
     const toAccount: Account = <Account>accounts.get(toName)
 
-    const date: DateTime = parseDate(transaction["Date"])
+    let date: DateTime = parseDate(transaction["Date"])
     let amount: number = parseInt(transaction["Amount"])
 
     if (!date.isValid) {
@@ -146,7 +159,14 @@ function totalTransactions(transactions: Transaction[]): number{
 }
 
 function parseDate(dateString: string): DateTime {
-    return DateTime.fromFormat(dateString, "d/M/yyyy")
+    let date: DateTime = DateTime.fromFormat(dateString, "d/M/yyyy")
+    if (date.isValid){
+        return date
+    }
+    else {
+        date = DateTime.fromISO(dateString)
+    }
+    return date
 }
 
 function list(option: string, transactions: Transaction[], accounts: Map<string, Account>){
